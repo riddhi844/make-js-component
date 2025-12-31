@@ -29,7 +29,7 @@ Can't find the framework or the options you need? Checkout the [Contributing gui
     - [Qwik](#qwik)
     - [Svelte](#svelte)
     - [Astro](#astro)
-    - [SolidJS](#solid)
+    - [SolidJS](#solidjs)
   - [Contributing](#contributing)
   - [Setup locally](#setup-locally)
 
@@ -73,6 +73,9 @@ You can specify the desired framework directly by adding a flag. The available f
 ```bash
 #this will create a vue component
 npx make-js-component --vue
+
+# this will create a SolidJS component
+npx make-js-component --solid
 ```
 
 #### --multiple
