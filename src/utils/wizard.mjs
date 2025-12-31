@@ -1,16 +1,29 @@
 import { Command } from "commander";
 import inquirer from "inquirer";
+
 import angularWizard from "./frameworks/angular/angular.mjs";
 import astroWizard from "./frameworks/astro/astro.mjs";
 import qwikWizard from "./frameworks/qwik/qwik.mjs";
 import reactWizard from "./frameworks/react/react.mjs";
 import svelteWizard from "./frameworks/svelte/svelte.mjs";
 import vueWizard from "./frameworks/vue/vue.mjs";
+import solidWizard from "./frameworks/solid/solid.mjs";
+
 import { capitalizeFirstLetter } from "./utils.mjs";
+
 const program = new Command();
+
 const wizard = async () => {
-  // Parse command line arguments using commander
-  const frameworks = ["Vue", "Angular", "React", "Svelte", "Qwik", "Astro"];
+  const frameworks = [
+    "Vue",
+    "Angular",
+    "React",
+    "Svelte",
+    "Qwik",
+    "Astro",
+    "SolidJS",
+  ];
+
   program
     .option("--name <value>", "Specify a name")
     .option(
@@ -23,30 +36,38 @@ const wizard = async () => {
     .option("--svelte", "Create a Svelte component")
     .option("--qwik", "Create a Qwik component")
     .option("--astro", "Create an Astro component")
+    .option("--solid", "Create a SolidJS component")
     .option("--folder <value>", "Specify the subfolder")
     .option("--multiple", "Creating multiple components at once")
     .parse(process.argv);
+
   const options = program.opts();
+
   const componentNameFromFlag = options.name || "";
+
   const frameworkFromFlag =
-    options.framework || options.vue
+    options.framework ||
+    (options.vue
       ? "vue"
-      : null || options.angular
-      ? "angular"
-      : null || options.react
-      ? "react"
-      : null || options.svelte
-      ? "svelte"
-      : null || options.qwik
-      ? "qwik"
-      : null || options.astro
-      ? "astro"
-      : null || "";
+      : options.angular
+        ? "angular"
+        : options.react
+          ? "react"
+          : options.svelte
+            ? "svelte"
+            : options.qwik
+              ? "qwik"
+              : options.astro
+                ? "astro"
+                : options.solid
+                  ? "solid"
+                  : "");
+
   const folderFromFlag = options.folder || "";
   const multipleFromFlag = options.multiple || false;
 
   const prompts = [];
-  // Only ask for componentName if --name argument is not provided
+
   if (!componentNameFromFlag) {
     prompts.push({
       type: "input",
@@ -60,7 +81,6 @@ const wizard = async () => {
         if (multipleFromFlag && trimmedInput === "exit") {
           process.exit();
         }
-        // Use a regular expression to check for only alphanumeric characters
         const isValid = /^[A-Za-z0-9]+(-[A-Za-z0-9]+)*$/.test(trimmedInput);
         return (
           isValid || "Component name can only contain alphanumeric characters"
@@ -68,6 +88,7 @@ const wizard = async () => {
       },
     });
   }
+
   if (!folderFromFlag) {
     prompts.push({
       type: "input",
@@ -76,6 +97,7 @@ const wizard = async () => {
       default: "",
     });
   }
+
   if (!frameworkFromFlag) {
     prompts.push({
       type: "list",
@@ -92,6 +114,7 @@ const wizard = async () => {
       const framework =
         answers.framework || capitalizeFirstLetter(frameworkFromFlag);
       const componentName = answers.componentName || componentNameFromFlag;
+
       switch (framework) {
         case "Vue":
           return vueWizard(componentName, folder);
@@ -105,6 +128,8 @@ const wizard = async () => {
           return qwikWizard(componentName, folder);
         case "Astro":
           return astroWizard(componentName, folder);
+        case "SolidJS":
+          return solidWizard(componentName, folder);
         default:
           throw new Error("A valid framework must be selected");
       }
@@ -121,12 +146,10 @@ const wizard = async () => {
             },
           ])
           .then((answers) => {
-            const { anotherComponent } = answers;
-            const completeValues = {
+            return {
               ...values,
-              anotherComponent: anotherComponent,
+              anotherComponent: answers.anotherComponent,
             };
-            return completeValues;
           });
       }
       return { ...values, anotherComponent: true };
@@ -135,4 +158,5 @@ const wizard = async () => {
       throw new Error(e.message);
     });
 };
+
 export default wizard;
