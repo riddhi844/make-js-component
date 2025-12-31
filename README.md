@@ -29,6 +29,7 @@ Can't find the framework or the options you need? Checkout the [Contributing gui
     - [Qwik](#qwik)
     - [Svelte](#svelte)
     - [Astro](#astro)
+    - [SolidJS](#solid)
   - [Contributing](#contributing)
   - [Setup locally](#setup-locally)
 
@@ -62,7 +63,7 @@ npx make-js-component --folder <PATH>
 Set which framework your component is for.
 
 ```bash
-npx make-js-component --framework [vue|angular|react|svelte|qwik|astro]
+npx make-js-component --framework [vue|angular|react|svelte|qwik|astro|solid]
 ```
 
 #### --[framework]
@@ -105,6 +106,14 @@ When choosing React, the wizard will ask you if you want to use **TypeScript** o
 
 ### Astro
 > Want to help with Astro components? Check out [Astro related issues](https://github.com/Giuliano1993/make-js-component/issues?q=is%3Aissue+is%3Aopen+label%3AAstro)
+
+### SolidJS
+> Want to help with SolidJS components? 
+
+When choosing SolidJS, the wizard will generate a functional component template
+with support for JavaScript and TypeScript, including Tailwind CSS,
+CSS Modules and styled component variants.
+
 
 ## Contributing
 
